@@ -73,7 +73,7 @@ app.post('/download', async (req, res) => {
       let subtitlePromises = results.map(async(url)=>{
         const responseSub = await axios.get(url, { responseType: 'arraybuffer' });
         return {
-          filename: `subtitle_${subtitleUrls.indexOf(url) + 1}.srt`,
+          filename: `subtitle_${results.indexOf(url) + 1}.srt`,
           data: response.data,
         };
       })
