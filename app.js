@@ -57,13 +57,13 @@ app.post('/download', async (req, res) => {
       const data = { file_id: subId };
 
       const config = {
-        method: 'post',
-        maxBodyLength: Infinity,
+        method: 'POST',
         url: 'https://api.opensubtitles.com/api/v1/download',
         headers: {
-          'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ',
+          'User-Agent': 'PostmanRuntime/7.35.0',
           'Content-Type': 'application/json',
-          'User-Agent':'PostmanRuntime/7.35.0'
+          Accept: 'application/json',
+          'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ'
         },
         data: data,
       };
@@ -75,7 +75,7 @@ app.post('/download', async (req, res) => {
         const responseSub = await axios.get(url, { responseType: 'arraybuffer' });
         return {
           filename: `subtitle_${results.indexOf(url) + 1}.srt`,
-          data: response.data,
+          data: responseSub.data,
         };
       })
       const subtitles = await Promise.all(subtitlePromises);
