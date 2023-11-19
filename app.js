@@ -63,6 +63,7 @@ app.post('/download', async (req, res) => {
         headers: {
           'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ',
           'Content-Type': 'application/json',
+          'User-Agent':'PostmanRuntime/7.35.0'
         },
         data: data,
       };
@@ -97,3 +98,5 @@ app.post('/download', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
