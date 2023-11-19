@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = 80;
@@ -42,6 +44,52 @@ app.post('/request', async (req, res) => {
     // Handle errors
     console.error('Axios GET request error:', error);
     res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/download', async (req, res) => {
+  try {
+    const subIds = req.body;
+
+    const results = [];
+
+    for (const subId of subIds) {
+      const data = { file_id: subId };
+
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.opensubtitles.com/api/v1/download',
+        headers: {
+          'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ',
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      };
+
+      const response = await axios(config);
+      results.push(response.data.link); 
+
+      let subtitlePromises = results.map(async(url)=>{
+        const responseSub = await axios.get(url, { responseType: 'arraybuffer' });
+        return {
+          filename: `subtitle_${subtitleUrls.indexOf(url) + 1}.srt`,
+          data: response.data,
+        };
+      })
+      const subtitles = await Promise.all(subtitlePromises);
+
+      // Set appropriate headers for a ZIP file containing all subtitles
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', 'attachment; filename=subtitles.zip');
+  
+      // Send all subtitles as a ZIP file to the client
+      res.send(subtitles);
+    }
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
