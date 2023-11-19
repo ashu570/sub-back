@@ -48,50 +48,49 @@ app.post('/request', async (req, res) => {
 });
 
 app.post('/download', async (req, res) => {
-  res.send("Hello")
-  // try {
-  //   const subIds = req.body.ids;
+  try {
+    const subIds = req.body.ids;
 
-  //   const results = [];
+    const results = [];
     
-  //   for (const subId of subIds) {
-  //     const data = { file_id: subId };
+    for (const subId of subIds) {
+      const data = { file_id: subId };
 
-  //     const config = {
-  //       method: 'post',
-  //       maxBodyLength: Infinity,
-  //       url: 'https://api.opensubtitles.com/api/v1/download',
-  //       headers: {
-  //         'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       data: data,
-  //     };
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.opensubtitles.com/api/v1/download',
+        headers: {
+          'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ',
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      };
 
-  //     const response = await axios(config);
-  //     results.push(response.data.link); 
+      const response = await axios(config);
+      results.push(response.data.link); 
 
-  //     let subtitlePromises = results.map(async(url)=>{
-  //       const responseSub = await axios.get(url, { responseType: 'arraybuffer' });
-  //       return {
-  //         filename: `subtitle_${results.indexOf(url) + 1}.srt`,
-  //         data: response.data,
-  //       };
-  //     })
-  //     const subtitles = await Promise.all(subtitlePromises);
+      let subtitlePromises = results.map(async(url)=>{
+        const responseSub = await axios.get(url, { responseType: 'arraybuffer' });
+        return {
+          filename: `subtitle_${results.indexOf(url) + 1}.srt`,
+          data: response.data,
+        };
+      })
+      const subtitles = await Promise.all(subtitlePromises);
 
-  //     // Set appropriate headers for a ZIP file containing all subtitles
-  //     res.setHeader('Content-Type', 'application/zip');
-  //     res.setHeader('Content-Disposition', 'attachment; filename=subtitles.zip');
+      // Set appropriate headers for a ZIP file containing all subtitles
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', 'attachment; filename=subtitles.zip');
   
-  //     // Send all subtitles as a ZIP file to the client
-  //     res.send(subtitles);
-  //   }
-  // } 
-  // catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ error: 'Internal Server Error' });
-  // }
+      // Send all subtitles as a ZIP file to the client
+      res.send(subtitles);
+    }
+  } 
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // Start the server
