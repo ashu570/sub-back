@@ -49,7 +49,7 @@ app.post('/request', async (req, res) => {
 
 app.post('/download', async (req, res) => {
   try {
-    const subIds = req.body;
+    const subIds = req.body.ids;
 
     const results = [];
 
