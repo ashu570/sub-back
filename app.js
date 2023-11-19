@@ -90,7 +90,7 @@ app.post('/download', async (req, res) => {
   } 
   catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: JSON.stringify(error) });
   }
 });
 
@@ -98,5 +98,3 @@ app.post('/download', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
