@@ -67,7 +67,7 @@ app.post('/download', async (req, res) => {
     const sub = await axios.get(result);
     res.setHeader('Content-Type', 'application/x-subrip');
     res.setHeader('Content-Disposition', 'attachment; filename=subtitles.srt');
-    res.send(response.data);
+    res.send(sub.data);
   } 
   catch (error) {
     console.error(error);
