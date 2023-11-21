@@ -49,44 +49,25 @@ app.post('/request', async (req, res) => {
 
 app.post('/download', async (req, res) => {
   try {
-    const subIds = req.body.ids;
-
-    const results = [];
-    
-    for (const subId of subIds) {
-      const data = { file_id: subId };
-
-      const config = {
-        method: 'POST',
-        url: 'https://api.opensubtitles.com/api/v1/download',
-        headers: {
-          'User-Agent': 'PostmanRuntime/7.35.0',
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ'
-        },
-        data: data,
-      };
-
-      const response = await axios(config);
-      results.push(response.data.link); 
-
-      let subtitlePromises = results.map(async(url)=>{
-        const responseSub = await axios.get(url, { responseType: 'arraybuffer' });
-        return {
-          filename: `subtitle_${results.indexOf(url) + 1}.srt`,
-          data: responseSub.data,
-        };
-      })
-      const subtitles = await Promise.all(subtitlePromises);
-
-      // Set appropriate headers for a ZIP file containing all subtitles
-      res.setHeader('Content-Type', 'application/zip');
-      res.setHeader('Content-Disposition', 'attachment; filename=subtitles.zip');
-  
-      // Send all subtitles as a ZIP file to the client
-      res.send(subtitles);
-    }
+    const subId = req.body.id;
+    const data = { file_id: subId };
+    const config = {
+      method: 'POST',
+      url: 'https://api.opensubtitles.com/api/v1/download',
+      headers: {
+        'User-Agent': 'PostmanRuntime/7.35.0',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Api-Key': 'Dt49ZXVqqDVspIRChYULD5hTOo44vpeJ'
+      },
+      data: data,
+    };
+    const response = await axios(config);
+    const result = response.data.link;
+    const sub = await axios.get(result);
+    res.setHeader('Content-Type', 'application/x-subrip');
+    res.setHeader('Content-Disposition', 'attachment; filename=subtitles.srt');
+    res.send(response.data);
   } 
   catch (error) {
     console.error(error);
