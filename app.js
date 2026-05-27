@@ -29,7 +29,7 @@ app.post('/request', async (req, res) => {
     maxBodyLength: Infinity,
     url: receivedString,
     headers: {
-      'Api-Key': 'xn1z8bxWjIiy7ymLrsBZ8hCzvXFsrMKz',
+      'Api-Key': 'FJKLiFyzx2uqacTdyCODGU0kHnIF8OvR',
       'User-Agent':'PostmanRuntime/7.35.0'
     },
   };
@@ -58,7 +58,7 @@ app.post('/download', async (req, res) => {
         'User-Agent': 'PostmanRuntime/7.35.0',
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        'Api-Key': 'xn1z8bxWjIiy7ymLrsBZ8hCzvXFsrMKz'
+        'Api-Key': 'FJKLiFyzx2uqacTdyCODGU0kHnIF8OvR'
       },
       data: data,
     };
