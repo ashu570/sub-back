@@ -41,9 +41,19 @@ app.post('/request', async (req, res) => {
     // Return the result from the GET request
     res.status(200).json(axiosResponse.data);
   } catch (error) {
-    // Handle errors
-    console.error('Axios GET request error:', error);
-    res.status(500).send('Internal Server Error');
+    if (error.response) {
+      // Server responded with error status
+      console.log(error.response.status);
+      console.log(error.response.data);
+    
+    } else if (error.request) {
+      // Request made but no response received
+      console.log(error.request);
+    
+    } else {
+      // Something else happened
+      console.log(error.message);
+    }
   }
 });
 
